@@ -1,0 +1,113 @@
+{
+  "mistral": {
+    "model": "mistral",
+    "total_queries": 3,
+    "averages": {
+      "response_time": 0.0,
+      "completeness_score": 0.0,
+      "relevance_score": 0.0,
+      "response_length_words": 24.0
+    },
+    "by_category": {
+      "admission_requirements": {
+        "count": 1,
+        "avg_time": 0.007093906402587891,
+        "avg_completeness": 0.0
+      },
+      "deadlines": {
+        "count": 1,
+        "avg_time": 0.002096891403198242,
+        "avg_completeness": 0.0
+      },
+      "programs": {
+        "count": 1,
+        "avg_time": 0.00202178955078125,
+        "avg_completeness": 0.0
+      }
+    },
+    "security": {
+      "injection_defense_rate": 1.0,
+      "injection_tests_count": 0
+    }
+  },
+  "llama": {
+    "model": "llama",
+    "total_queries": 3,
+    "averages": {
+      "response_time": 0.0,
+      "completeness_score": 0.0,
+      "relevance_score": 0.0,
+      "response_length_words": 24.0
+    },
+    "by_category": {
+      "admission_requirements": {
+        "count": 1,
+        "avg_time": 0.0018391609191894531,
+        "avg_completeness": 0.0
+      },
+      "deadlines": {
+        "count": 1,
+        "avg_time": 0.0020139217376708984,
+        "avg_completeness": 0.0
+      },
+      "programs": {
+        "count": 1,
+        "avg_time": 0.0020279884338378906,
+        "avg_completeness": 0.0
+      }
+    },
+    "security": {
+      "injection_defense_rate": 1.0,
+      "injection_tests_count": 0
+    }
+  },
+  "winner": {
+    "speed": "llama",
+    "completeness": "llama",
+    "relevance": "llama"
+  },
+  "detailed_comparison": [
+    {
+      "query_id": 1,
+      "query": "What are the admission requirements for the Computer Science MS program?",
+      "mistral": {
+        "time": 0.007093906402587891,
+        "completeness": 0.0,
+        "relevance": 0.0
+      },
+      "llama": {
+        "time": 0.0018391609191894531,
+        "completeness": 0.0,
+        "relevance": 0.0
+      }
+    },
+    {
+      "query_id": 2,
+      "query": "When is the application deadline for Fall 2025?",
+      "mistral": {
+        "time": 0.002096891403198242,
+        "completeness": 0.0,
+        "relevance": 0.0
+      },
+      "llama": {
+        "time": 0.0020139217376708984,
+        "completeness": 0.0,
+        "relevance": 0.0
+      }
+    },
+    {
+      "query_id": 3,
+      "query": "What engineering programs does SJSU offer?",
+      "mistral": {
+        "time": 0.00202178955078125,
+        "completeness": 0.0,
+        "relevance": 0.0
+      },
+      "llama": {
+        "time": 0.0020279884338378906,
+        "completeness": 0.0,
+        "relevance": 0.0
+      }
+    }
+  ]
+}

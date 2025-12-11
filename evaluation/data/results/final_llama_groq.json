@@ -1,0 +1,235 @@
+{
+  "model": "Groq-Llama-3.3-70B",
+  "queries": [
+    {
+      "query_id": 1,
+      "query": "What undergraduate programs are available at SJSU?",
+      "category": "programs",
+      "response": "SJSU offers a variety of undergraduate programs, including Business Administration (BS), Computer Engineering (BS), Computer Science (BS), Electrical Engineering (BS), Mechanical Engineering (BS), and Nursing (BS). For more information about each program, you can visit the respective department's website. If you have any specific questions or need further assistance, feel free to ask.",
+      "response_time": 1.56,
+      "completeness": 0.33,
+      "relevance": 0.6,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 2,
+      "query": "What are the admission requirements for Computer Science?",
+      "category": "admission_requirements",
+      "response": "The admission requirements for the Computer Science program at SJSU include a minimum GPA of 3.0, a high school GPA of 3.0 or higher, SAT/ACT scores, and completion of A-G requirements. If you have any further questions or need more information, feel free to ask.",
+      "response_time": 1.21,
+      "completeness": 0.67,
+      "relevance": 0.75,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 3,
+      "query": "What is the deadline to apply for Fall 2025?",
+      "category": "deadlines",
+      "response": "The deadline to apply for Fall 2025 at SJSU is April 1, 2026, for returning students who attended another institution. However, it's essential to check the specific deadline for your situation, as deadlines may vary depending on your status as a returning student or if you've attended another institution after SJSU. You can find more information on the SJSU website, particularly on the admissions page, which outlines all the necessary deadlines and requirements for the Fall 2025 semester.",
+      "response_time": 2.78,
+      "completeness": 0.5,
+      "relevance": 0.75,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 4,
+      "query": "How do I transfer credits from another college?",
+      "category": "transfer",
+      "response": "To transfer credits from another college to SJSU, you'll typically need to submit your official transcripts from the previous institution. SJSU will then evaluate your credits to determine which ones are transferable. You can visit the SJSU website or contact the admissions office for more specific information on the credit transfer process and any required documents. Additionally, you may want to reach out to the academic department of your intended major for guidance on how transferred credits will apply to your degree requirements.",
+      "response_time": 2.91,
+      "completeness": 1.0,
+      "relevance": 0.86,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 5,
+      "query": "What GPA do I need to maintain my scholarship?",
+      "category": "financial_aid",
+      "response": "The GPA requirement to maintain a scholarship at SJSU varies by scholarship, ranging from 3.3 to 3.8. Check your specific scholarship for details.",
+      "response_time": 1.63,
+      "completeness": 1.0,
+      "relevance": 0.43,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 6,
+      "query": "When does course registration open?",
+      "category": "registration",
+      "response": "The course registration for spring 2026 at SJSU opens on October 28, 2025. You can find more information on the registration process and schedules on the SJSU website, particularly on the Office of the Registrar's page.",
+      "response_time": 4.04,
+      "completeness": 0.5,
+      "relevance": 0.5,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 7,
+      "query": "How can I make an appointment with an academic advisor?",
+      "category": "advising",
+      "response": "To make an appointment with an academic advisor, you can schedule appointments through Navigate or visit the Academic Advising Center (SSC 100). Walk-ins are also available during drop-in hours. If you have any further questions or need more information, feel free to ask.",
+      "response_time": 1.29,
+      "completeness": 0.33,
+      "relevance": 0.86,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 8,
+      "query": "What are the tuition fees for graduate students?",
+      "category": "financial",
+      "response": "The current tuition fees for graduate students at SJSU for the 2025-2026 academic year are as follows: \n- For in-state students, the total cost is $29,953.\n- For out-of-state students, the total cost is $42,553.\nAdditionally, the Post-Master's Certificate tuition is $568 per unit. Please note that these fees are subject to change, and you should check the SJSU website for the most up-to-date information. You can visit the SJSU Bursar's office website for more details on tuition and fees.",
+      "response_time": 4.14,
+      "completeness": 0.67,
+      "relevance": 0.75,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 9,
+      "query": "How do I apply for on-campus housing?",
+      "category": "housing",
+      "response": "To apply for on-campus housing at SJSU, you can submit an online application via the housing portal, pay the $50 fee, and make an initial payment. Housing decisions are made on a first-come, first-served basis. You can find more information and the application portal on the SJSU Housing Office website: https://www.sjsu.edu/housing/. If you have any further questions or need assistance, you can contact the Housing Office directly at (408) 924-6160 or email them at housing@sjsu.edu.",
+      "response_time": 3.52,
+      "completeness": 0.67,
+      "relevance": 0.6,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 10,
+      "query": "What is the last day to drop a class with a refund?",
+      "category": "registration",
+      "response": "The last day to drop a class with a refund for Fall 2025 is September 8, 2025, and for Spring 2026 is February 3, 2026.",
+      "response_time": 2.55,
+      "completeness": 0.67,
+      "relevance": 0.83,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 11,
+      "query": "How can I find information about financial aid?",
+      "category": "financial_aid",
+      "response": "For information about financial aid, you can start by visiting the SJSU Financial Aid Office website or contacting them directly at (408) 283-7500. They offer live chat Monday through Friday from 12-4 pm, and appointments are available in-person and virtually. Additionally, you can explore the list of scholarships I found earlier, which includes the Presidential Scholarship, Dean's Scholarship, Engineering Excellence Award, and Transfer Student Scholarship. You can find more details about these scholarships and how to apply on the SJSU website. If you have any specific questions or need further assistance, feel free to ask.",
+      "response_time": 2.93,
+      "completeness": 1.0,
+      "relevance": 0.86,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 12,
+      "query": "What prerequisites I need to take CMPE 259?",
+      "category": "course_requirements",
+      "response": "I apologize, but it seems like I'm having trouble finding the prerequisites for CMPE 259 using the database query. I recommend checking the SJSU catalog or the department's website for the most up-to-date information on course prerequisites. You can also contact the Computer Engineering department directly for more information.",
+      "response_time": 6.04,
+      "completeness": 0.5,
+      "relevance": 0.5,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 13,
+      "query": "What student clubs are available for engineering majors?",
+      "category": "campus_resources",
+      "response": "SJSU offers various student clubs for engineering majors, including the ACM Student Chapter, American Society of Mechanical Engineers, Data Science Club, IEEE Student Branch, Society of Hispanic Professional Engineers, and Society of Women Engineers. These clubs cater to different engineering disciplines and provide opportunities for networking, professional development, and community engagement. For more information, you can contact the respective clubs directly through their email addresses or attend their meetings. Additionally, you can visit the SJSU website or contact the Student Organization Office for a complete list of student clubs and organizations available on campus.",
+      "response_time": 2.71,
+      "completeness": 1.0,
+      "relevance": 0.8,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 14,
+      "query": "How can I request my transcripts?",
+      "category": "academic_records",
+      "response": "To request your transcripts, you can typically contact the registrar's office or use an online portal. You can visit the SJSU website and navigate to the Office of the Registrar's page for more information on the transcript request process. They may have an online form or a contact email/phone number to assist you with your request. If you have any further questions or need more information, feel free to ask.",
+      "response_time": 2.12,
+      "completeness": 1.0,
+      "relevance": 0.6,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 15,
+      "query": "What are the library hours during finals week?",
+      "category": "campus_resources",
+      "response": "The SJSU library hours during finals week are 1pm \u2013 12am. King Library is open 8am\u20138pm. SJSU Chat Reference is 9am\u20137pm. You can find more information on the SJSU library website or by visiting their social media pages.",
+      "response_time": 2.84,
+      "completeness": 1.0,
+      "relevance": 0.8,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 16,
+      "query": "Can you list all deadlines for Spring 2025 registration?",
+      "category": "registration",
+      "response": "The deadlines for Spring 2025 registration at SJSU are as follows: \n- Intent to Enroll deadline: December 1, 2024\n- Advance registration ends: January 20, 2025\n- Regular registration starts: January 23, 2025\n- Late registration starts: January 23, 2025\n- Waitlist ends: February 3, 2025\n\nPlease note that these deadlines are subject to change, and it's always a good idea to check the SJSU website or contact the registrar's office for the most up-to-date information. You can visit the SJSU registration bulletin page for more details: https://www.sjsu.edu/registrar/faculty-staff/important-bulletins/spring-2025-registration-bulletin.php",
+      "response_time": 2.88,
+      "completeness": 1.0,
+      "relevance": 0.75,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 17,
+      "query": "How do I change my major?",
+      "category": "academic_policies",
+      "response": "To change your major at SJSU, you will typically need to submit a change of major form to the registrar's office. You can find the form on the SJSU website or pick one up in person at the registrar's office. It's recommended that you meet with an academic advisor in your desired major to discuss the requirements and ensure a smooth transition. Once you have completed the form, submit it to the registrar's office for processing. Please note that changing your major may affect your financial aid, scholarships, or graduation timeline, so it's essential to review these aspects with an advisor. If you have any further questions or need more information, feel free to ask.",
+      "response_time": 0.77,
+      "completeness": 1.0,
+      "relevance": 0.4,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 18,
+      "query": "What is the minimum TOEFL score required for international students?",
+      "category": "admission_requirements",
+      "response": "The minimum TOEFL score required for international students at SJSU is 80 for most graduate programs and 71 for undergraduate programs. Additionally, an IELTS score of 6.5 is also accepted.",
+      "response_time": 1.07,
+      "completeness": 0.67,
+      "relevance": 0.83,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 19,
+      "query": "Where can I find campus health services?",
+      "category": "campus_resources",
+      "response": "The campus health services can be found at the Student Health Center, located in the Student Wellness Center (SWC) on the main floor. You can contact them at 408-924-6120 or email health@sjsu.edu. They provide medical services, counseling, and wellness programs for SJSU students. Their hours of operation are Monday-Friday: 8:00 AM - 5:00 PM. You can also visit their website at https://www.sjsu.edu/studenthealth/ for more information.",
+      "response_time": 1.28,
+      "completeness": 0.67,
+      "relevance": 0.67,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 20,
+      "query": "Who should I contact for disability accommodations?",
+      "category": "support_services",
+      "response": "For disability accommodations, you can contact the Accessible Education Center (AEC) at SJSU. They provide support services and accommodations for students with disabilities. You can visit their website or contact them directly at (408) 924-6000. They are located in the Student Wellness Center (SWC) and are open Monday-Friday, 8am-5pm.",
+      "response_time": 0.57,
+      "completeness": 0.67,
+      "relevance": 0.5,
+      "success": true,
+      "timeout": false
+    }
+  ],
+  "timestamp": "2025-12-09T22:36:01.816559",
+  "statistics": {
+    "total_queries": 20,
+    "successful_queries": 20,
+    "success_rate": 1.0,
+    "avg_response_time": 2.44,
+    "avg_completeness": 0.74,
+    "avg_relevance": 0.68,
+    "timeout_rate": 0.0
+  }
+}

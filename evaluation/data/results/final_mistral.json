@@ -1,0 +1,235 @@
+{
+  "model": "Mistral-7B",
+  "queries": [
+    {
+      "query_id": 1,
+      "query": "What undergraduate programs are available at SJSU?",
+      "category": "programs",
+      "response": "San Jos\u00e9 State University offers the following undergraduate programs: Business Administration, Computer Science, Electrical and Computer Engineering Technology, Engineering Technology Management, Kinesiology, Liberal Studies, Mathematics, Science and Technology Education, Nursing, and Social Work. For detailed information about each program or to ask questions, feel free to ask!\n   For troubleshooting, visit: https://docs.langchain.com/oss/python/langchain/errors/OUTPUT_PARSING_FAILURE",
+      "response_time": 212.98,
+      "completeness": 0.33,
+      "relevance": 0.0,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 2,
+      "query": "What are the admission requirements for Computer Science?",
+      "category": "admission_requirements",
+      "response": "Agent stopped due to iteration limit or time limit.",
+      "response_time": 208.47,
+      "completeness": 0.0,
+      "relevance": 0.0,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 3,
+      "query": "What is the deadline to apply for Fall 2025?",
+      "category": "deadlines",
+      "response": "The deadline to apply for Fall 2025 at San Jos\u00e9 State University is January 31, 2025. For more information about the application process or other queries, feel free to ask! If you have any troubleshooting questions, please visit: <https://docs.langchain.com/oss/python/langchain/errors/OUTPUT_PARSING_FAILURE>\n   For troubleshooting, visit: <https://docs.langchain.com/oss/python/langchain/errors/OUTPUT_PARSING_FAILURE>",
+      "response_time": 73.66,
+      "completeness": 1.0,
+      "relevance": 0.0,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 4,
+      "query": "How do I transfer credits from another college?",
+      "category": "transfer",
+      "response": "At San Jos\u00e9 State University, to transfer credits from another college, you'll want to consult with the Admissions and Records office for guidance on the process and requirements. Their contact information can be found at this link: <https://www.sjsu.edu/admissions/> If you have any questions or need further assistance, feel free to ask! For troubleshooting, visit: <https://docs.langchain.com/oss/python/langchain/errors/OUTPUT_PARSING_FAILURE>\n   For more general information about SJSU, feel free to ask!",
+      "response_time": 87.9,
+      "completeness": 1.0,
+      "relevance": 0.0,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 5,
+      "query": "What GPA do I need to maintain my scholarship?",
+      "category": "financial_aid",
+      "response": "Agent stopped due to iteration limit or time limit.",
+      "response_time": 201.94,
+      "completeness": 0.0,
+      "relevance": 0.14,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 6,
+      "query": "When does course registration open?",
+      "category": "registration",
+      "response": "Agent stopped due to iteration limit or time limit.",
+      "response_time": 193.96,
+      "completeness": 0.0,
+      "relevance": 0.0,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 7,
+      "query": "How can I make an appointment with an academic advisor?",
+      "category": "advising",
+      "response": "To make an appointment with an academic advisor at San Jos\u00e9 State University, follow these steps:\n   1. Log in to MySJSU (<https://mysjsu.sjsu.edu/>) using your credentials.\n   2. Click on \"Student Services\" and then select \"Advisement\".\n   3. Under the \"Advising\" tab, click on \"Schedule an Appointment with Your Advisor\".\n   4. Choose the college or department that corresponds to your major, and follow the prompts to schedule your appointment.\n   5. If you encounter any issues, please visit the Academic Advising Center's website (<https://www.sjsu.edu/advising/>) for additional assistance.",
+      "response_time": 130.69,
+      "completeness": 0.33,
+      "relevance": 0.71,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 8,
+      "query": "What are the tuition fees for graduate students?",
+      "category": "financial",
+      "response": "Agent stopped due to iteration limit or time limit.",
+      "response_time": 188.49,
+      "completeness": 0.0,
+      "relevance": 0.0,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 9,
+      "query": "How do I apply for on-campus housing?",
+      "category": "housing",
+      "response": "To apply for on-campus housing at San Jos\u00e9 State University, follow these steps:\n   1. Go to the Housing and Residential Life website (<https://housing.sjsu.edu/>)\n   2. Create a MySJSU account if you don't already have one (<https://mysjsu.sjsu.edu/>)\n   3. Log in to your MySJSU account\n   4. Apply for housing by filling out the online application and submitting any necessary documents\n   5. Pay the housing application fee if applicable\n   6. Check your MySJSU account for updates on your housing status\n   For troubleshooting, visit: [https://docs.langchain.com/oss/python/langchain/errors/OUTPUT_PARSING_FAILURE](https://docs.langchain.com/oss/python/langchain/errors/OUTPUT_PARSING_FAILURE)",
+      "response_time": 79.06,
+      "completeness": 0.33,
+      "relevance": 0.0,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 10,
+      "query": "What is the last day to drop a class with a refund?",
+      "category": "registration",
+      "response": "The last day to drop a class with a refund at San Jos\u00e9 State University is usually around the third week of the semester. However, it's essential to consult the academic calendar for the exact date and specific requirements for each term. Here is the link to the Academic Calendar: <https://www.sjsu.edu/registrar/calendar/> If you have any further questions or need assistance, feel free to ask!\n   For troubleshooting, visit: https://docs.langchain.com/oss/python/langchain/errors/OUTPUT_PARSING_FAILURE",
+      "response_time": 61.6,
+      "completeness": 1.0,
+      "relevance": 0.0,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 11,
+      "query": "How can I find information about financial aid?",
+      "category": "financial_aid",
+      "response": "Agent stopped due to iteration limit or time limit.",
+      "response_time": 192.27,
+      "completeness": 0.0,
+      "relevance": 0.14,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 12,
+      "query": "What prerequisites I need to take CMPE 259?",
+      "category": "course_requirements",
+      "response": "Agent stopped due to iteration limit or time limit.",
+      "response_time": 213.27,
+      "completeness": 0.0,
+      "relevance": 0.17,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 13,
+      "query": "What student clubs are available for engineering majors?",
+      "category": "campus_resources",
+      "response": "At San Jos\u00e9 State University, the following student clubs are available for engineering majors: American Society of Mechanical Engineers (ASME), Institute of Electrical and Electronics Engineers (IEEE), Society of Automotive Engineers (SAE), National Society of Black Engineers (NSBE), Society of Hispanic Professional Engineers (SHPE), Tau Beta Pi (engineering honor society), Women in Engineering and Computer Science (WECS), and Engineering Student Council (ESC). If you'd like to learn more about each club or want to get involved, I encourage you to visit their respective websites for additional information and contact details. Here are the links:\n\n   - American Society of Mechanical Engineers (ASME): [https://asme-sjsu.org/](https://asme-sjsu.org/)\n   - Institute of Electrical and Electronics Engineers (IEEE): [https://ieee-sjsu.org/](https://ieee-sjsu.org/)\n   - Society of Automotive Engineers (SAE): [http://saesjsu.com/](http://saesjsu.com/)\n   - National Society of Black Engineers (NSBE): [https://nsbe-sjsu.org/](https://nsbe-sjsu.org/)\n   - Society of Hispanic Professional Engineers (SHPE): [http://shpe-sjsu.org/](http://shpe-sjsu.org/)\n   - Tau Beta Pi (engineering honor society): [https://taubetapi.sjsu.edu/](https://taubetapi.sjsu.edu/)\n   - Women in Engineering and Computer Science (WECS): [http://wecs-sjsu.org/](http://wecs-sjsu.org/)\n\n   For further assistance or if you have any questions, feel free to ask! I'm here to help. Enjoy your club activities!",
+      "response_time": 221.13,
+      "completeness": 1.0,
+      "relevance": 0.8,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 14,
+      "query": "How can I request my transcripts?",
+      "category": "academic_records",
+      "response": "Agent stopped due to iteration limit or time limit.",
+      "response_time": 193.58,
+      "completeness": 0.0,
+      "relevance": 0.2,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 15,
+      "query": "What are the library hours during finals week?",
+      "category": "campus_resources",
+      "response": "Agent stopped due to iteration limit or time limit.",
+      "response_time": 222.06,
+      "completeness": 0.0,
+      "relevance": 0.0,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 16,
+      "query": "Can you list all deadlines for Spring 2025 registration?",
+      "category": "registration",
+      "response": "Agent stopped due to iteration limit or time limit.",
+      "response_time": 224.96,
+      "completeness": 0.0,
+      "relevance": 0.0,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 17,
+      "query": "How do I change my major?",
+      "category": "academic_policies",
+      "response": "To change your major at San Jos\u00e9 State University, log in to MySJSU and follow the steps provided. If you have any questions or need further assistance, feel free to ask! Here's the link for more information about changing your major: <https://www.sjsu.edu/change-major/>\nFor troubleshooting, visit: https://docs.langchain.com/oss/python/langchain/errors/OUTPUT_PARSING_FAILURE",
+      "response_time": 178.88,
+      "completeness": 0.67,
+      "relevance": 0.0,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 18,
+      "query": "What is the minimum TOEFL score required for international students?",
+      "category": "admission_requirements",
+      "response": "The minimum TOEFL score required for international students at SJSU is 79 on the internet-based test (iBT). If you have any questions or need further assistance, feel free to ask! Good luck with your studies at San Jos\u00e9 State University!",
+      "response_time": 205.93,
+      "completeness": 0.67,
+      "relevance": 0.83,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 19,
+      "query": "Where can I find campus health services?",
+      "category": "campus_resources",
+      "response": "The Campus Health Services at San Jos\u00e9 State University are located in the Student Wellness Center. Their address is 981 South 7th Street, San Jose, CA 95192-0030. They provide a wide range of health services for students, including primary care, pharmacy, and mental health counseling. If you'd like more information about the services offered by Campus Health Services or have questions about making an appointment, I encourage you to visit their website for additional details: <https://campushealthservices.sjsu.edu/> For troubleshooting, visit: <https://docs.langchain.com/oss/python/langchain/errors/OUTPUT_PARSING_FAILURE>\n   If you'd like more information about the Campus Health Services or have any questions, feel free to ask! Enjoy your visit to the Student Wellness Center at SJSU.",
+      "response_time": 157.7,
+      "completeness": 0.33,
+      "relevance": 0.0,
+      "success": true,
+      "timeout": false
+    },
+    {
+      "query_id": 20,
+      "query": "Who should I contact for disability accommodations?",
+      "category": "support_services",
+      "response": "Agent stopped due to iteration limit or time limit.",
+      "response_time": 183.29,
+      "completeness": 0.0,
+      "relevance": 0.17,
+      "success": true,
+      "timeout": false
+    }
+  ],
+  "timestamp": "2025-12-09T22:36:25.758628",
+  "statistics": {
+    "total_queries": 20,
+    "successful_queries": 20,
+    "success_rate": 1.0,
+    "avg_response_time": 171.59,
+    "avg_completeness": 0.33,
+    "avg_relevance": 0.16,
+    "timeout_rate": 0.0
+  }
+}

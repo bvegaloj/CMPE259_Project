@@ -1,0 +1,162 @@
+[
+  {
+    "id": 1,
+    "query": "What undergraduate programs are available at SJSU?",
+    "category": "programs",
+    "complexity": "simple",
+    "expected_tool": "database",
+    "expected_info": ["program names", "degree types", "colleges"]
+  },
+  {
+    "id": 2,
+    "query": "What are the admission requirements for Computer Science?",
+    "category": "admission_requirements",
+    "complexity": "simple",
+    "expected_tool": "database",
+    "expected_info": ["GPA requirement", "prerequisites", "test scores"]
+  },
+  {
+    "id": 3,
+    "query": "What is the deadline to apply for Fall 2025?",
+    "category": "deadlines",
+    "complexity": "simple",
+    "expected_tool": "database",
+    "expected_info": ["Fall 2025 deadline", "application type"]
+  },
+  {
+    "id": 4,
+    "query": "How do I transfer credits from another college?",
+    "category": "transfer",
+    "complexity": "medium",
+    "expected_tool": "database",
+    "expected_info": ["transfer process", "credit evaluation", "contact info"]
+  },
+  {
+    "id": 5,
+    "query": "What GPA do I need to maintain my scholarship?",
+    "category": "financial_aid",
+    "complexity": "medium",
+    "expected_tool": "database",
+    "expected_info": ["GPA requirement", "scholarship conditions"]
+  },
+  {
+    "id": 6,
+    "query": "When does course registration open?",
+    "category": "registration",
+    "complexity": "simple",
+    "expected_tool": "database",
+    "expected_info": ["registration dates", "semester"]
+  },
+  {
+    "id": 7,
+    "query": "How can I make an appointment with an academic advisor?",
+    "category": "advising",
+    "complexity": "simple",
+    "expected_tool": "database",
+    "expected_info": ["contact method", "appointment process", "office location"]
+  },
+  {
+    "id": 8,
+    "query": "What are the tuition fees for graduate students?",
+    "category": "financial",
+    "complexity": "simple",
+    "expected_tool": "database",
+    "expected_info": ["tuition amount", "resident vs non-resident", "fees"]
+  },
+  {
+    "id": 9,
+    "query": "How do I apply for on-campus housing?",
+    "category": "housing",
+    "complexity": "medium",
+    "expected_tool": "database",
+    "expected_info": ["application process", "deadlines", "contact info"]
+  },
+  {
+    "id": 10,
+    "query": "What is the last day to drop a class with a refund?",
+    "category": "registration",
+    "complexity": "simple",
+    "expected_tool": "database",
+    "expected_info": ["drop deadline", "refund policy", "semester"]
+  },
+  {
+    "id": 11,
+    "query": "How can I find information about financial aid?",
+    "category": "financial_aid",
+    "complexity": "simple",
+    "expected_tool": "database",
+    "expected_info": ["financial aid resources", "contact info", "website"]
+  },
+  {
+    "id": 12,
+    "query": "What prerequisites I need to take CMPE 259?",
+    "category": "course_requirements",
+    "complexity": "medium",
+    "expected_tool": "database",
+    "expected_info": ["prerequisite courses", "requirements"]
+  },
+  {
+    "id": 13,
+    "query": "What student clubs are available for engineering majors?",
+    "category": "campus_resources",
+    "complexity": "simple",
+    "expected_tool": "database",
+    "expected_info": ["club names", "engineering focus"]
+  },
+  {
+    "id": 14,
+    "query": "How can I request my transcripts?",
+    "category": "academic_records",
+    "complexity": "simple",
+    "expected_tool": "database",
+    "expected_info": ["request process", "contact info", "online portal"]
+  },
+  {
+    "id": 15,
+    "query": "What are the library hours during finals week?",
+    "category": "campus_resources",
+    "complexity": "simple",
+    "expected_tool": "database",
+    "expected_info": ["library hours", "finals week"]
+  },
+  {
+    "id": 16,
+    "query": "Can you list all deadlines for Spring 2025 registration?",
+    "category": "registration",
+    "complexity": "medium",
+    "expected_tool": "database",
+    "expected_info": ["registration dates", "add/drop deadlines", "Spring 2025"]
+  },
+  {
+    "id": 17,
+    "query": "How do I change my major?",
+    "category": "academic_policies",
+    "complexity": "medium",
+    "expected_tool": "database",
+    "expected_info": ["change process", "requirements", "contact info"]
+  },
+  {
+    "id": 18,
+    "query": "What is the minimum TOEFL score required for international students?",
+    "category": "admission_requirements",
+    "complexity": "simple",
+    "expected_tool": "database",
+    "expected_info": ["TOEFL score", "international students", "English proficiency"]
+  },
+  {
+    "id": 19,
+    "query": "Where can I find campus health services?",
+    "category": "campus_resources",
+    "complexity": "simple",
+    "expected_tool": "database",
+    "expected_info": ["location", "contact", "services"]
+  },
+  {
+    "id": 20,
+    "query": "Who should I contact for disability accommodations?",
+    "category": "support_services",
+    "complexity": "simple",
+    "expected_tool": "database",
+    "expected_info": ["contact info", "office name", "accommodation process"]
+  }
+]

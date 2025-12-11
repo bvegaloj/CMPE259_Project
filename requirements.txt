@@ -1,0 +1,48 @@
+# Core Dependencies
+python-dotenv==1.0.0
+
+# LLM APIs
+groq>=0.4.0  # Groq API for Llama-3.3-70B (recommended)
+langchain-groq>=0.1.0  # LangChain Groq integration (used in evaluation scripts)
+mistralai>=0.0.7  # Mistral AI API (optional)
+
+# Local LLM Support (Optional - only needed for Ollama)
+# transformers==4.36.0
+# torch>=2.2.0
+# accelerate>=0.25.0
+# bitsandbytes>=0.41.0
+# sentencepiece>=0.1.99
+# protobuf>=3.20.0
+
+# Database
+# sqlite3 is built into Python
+
+# Web Search
+requests==2.31.0
+tavily-python>=0.7.0  # Tavily AI Search API (recommended)
+beautifulsoup4==4.12.2
+# duckduckgo-search==4.1.0  # Alternative (has API issues)
+# serpapi==0.1.5  # Alternative (requires API key)
+
+# Utilities
+pydantic==2.5.0
+pyyaml==6.0.1
+
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+
+# UI Options
+streamlit==1.29.0
+gradio==4.11.0
+
+# Monitoring and Logging
+tqdm==4.66.1
+
+# Optional: For running quantized models locally
+# llama-cpp-python==0.2.23
+# ctransformers==0.2.27
+
+# Optional: For vector database (future enhancement)
+# chromadb==0.4.18
+# sentence-transformers==2.2.2

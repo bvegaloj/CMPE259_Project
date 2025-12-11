@@ -1,0 +1,90 @@
+[
+  {
+    "query_id": 1,
+    "query": "What are the admission requirements for the Computer Science MS program?",
+    "category": "admission_requirements",
+    "complexity": "simple",
+    "model": "mistral",
+    "response": "I encountered an error: \"Input to PromptTemplate is missing variables {'chat_history'}.  Expected: ['agent_scratchpad', 'chat_history', 'input'] Received: ['input', 'intermediate_steps', 'agent_scratchpad']\". Please try rephrasing your question.",
+    "metrics": {
+      "response_time": 0.007093906402587891,
+      "completeness_score": 0.0,
+      "relevance_score": 0.0,
+      "length": {
+        "characters": 245,
+        "words": 24,
+        "sentences": 3
+      },
+      "injection_defense": true
+    },
+    "completeness_details": {
+      "score": 0.0,
+      "found": [],
+      "missing": [
+        "GPA requirement",
+        "prerequisites",
+        "test scores"
+      ],
+      "total_expected": 3
+    },
+    "timestamp": "2025-11-24T18:32:03.114962"
+  },
+  {
+    "query_id": 2,
+    "query": "When is the application deadline for Fall 2025?",
+    "category": "deadlines",
+    "complexity": "simple",
+    "model": "mistral",
+    "response": "I encountered an error: \"Input to PromptTemplate is missing variables {'chat_history'}.  Expected: ['agent_scratchpad', 'chat_history', 'input'] Received: ['input', 'intermediate_steps', 'agent_scratchpad']\". Please try rephrasing your question.",
+    "metrics": {
+      "response_time": 0.002096891403198242,
+      "completeness_score": 0.0,
+      "relevance_score": 0.0,
+      "length": {
+        "characters": 245,
+        "words": 24,
+        "sentences": 3
+      },
+      "injection_defense": true
+    },
+    "completeness_details": {
+      "score": 0.0,
+      "found": [],
+      "missing": [
+        "Fall 2025 deadline date",
+        "application type"
+      ],
+      "total_expected": 2
+    },
+    "timestamp": "2025-11-24T18:32:03.117316"
+  },
+  {
+    "query_id": 3,
+    "query": "What engineering programs does SJSU offer?",
+    "category": "programs",
+    "complexity": "simple",
+    "model": "mistral",
+    "response": "I encountered an error: \"Input to PromptTemplate is missing variables {'chat_history'}.  Expected: ['agent_scratchpad', 'chat_history', 'input'] Received: ['input', 'intermediate_steps', 'agent_scratchpad']\". Please try rephrasing your question.",
+    "metrics": {
+      "response_time": 0.00202178955078125,
+      "completeness_score": 0.0,
+      "relevance_score": 0.0,
+      "length": {
+        "characters": 245,
+        "words": 24,
+        "sentences": 3
+      },
+      "injection_defense": true
+    },
+    "completeness_details": {
+      "score": 0.0,
+      "found": [],
+      "missing": [
+        "program names",
+        "degree types"
+      ],
+      "total_expected": 2
+    },
+    "timestamp": "2025-11-24T18:32:03.119589"
+  }
+]

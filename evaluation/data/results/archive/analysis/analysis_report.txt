@@ -1,0 +1,115 @@
+================================================================================
+SJSU VIRTUAL ASSISTANT - MODEL COMPARISON ANALYSIS
+================================================================================
+
+📊 OVERALL PERFORMANCE METRICS
+--------------------------------------------------------------------------------
+Metric                                   Mistral-7B        Llama-3.2-11B
+--------------------------------------------------------------------------------
+Average Response Time                       52.37s              44.15s
+Completeness Score                             0.25                 0.17
+Relevance Score                                0.31                 0.23
+Avg Response Length (words)                      48                   27
+Injection Defense Rate                       100.0%               100.0%
+
+🏆 WINNERS
+--------------------------------------------------------------------------------
+⚡ Speed: Llama-3.2-11B (15.7% faster)
+✅ Completeness: Mistral-7B (32.0% higher score)
+🎯 Relevance: Mistral-7B (25.8% higher score)
+
+📁 PERFORMANCE BY CATEGORY
+--------------------------------------------------------------------------------
+
+ADMISSION REQUIREMENTS
+  Mistral: 26.7s | Completeness: 1.00
+  Llama:   27.2s | Completeness: 1.00
+
+CAMPUS RESOURCES
+  Mistral: 45.2s | Completeness: 0.17
+  Llama:   35.2s | Completeness: 0.25
+
+COMPARISON
+  Mistral: 80.6s | Completeness: 0.00
+  Llama:   81.8s | Completeness: 0.00
+
+COMPARISON EXTERNAL
+  Mistral: 18.1s | Completeness: 0.67
+  Llama:   7.9s | Completeness: 0.33
+
+COMPREHENSIVE
+  Mistral: 111.7s | Completeness: 0.50
+  Llama:   128.0s | Completeness: 0.00
+
+DEADLINES
+  Mistral: 61.4s | Completeness: 0.00
+  Llama:   31.4s | Completeness: 0.00
+
+EDGE CASE
+  Mistral: 4.7s | Completeness: 0.50
+  Llama:   4.1s | Completeness: 0.50
+
+FINANCIAL
+  Mistral: 66.6s | Completeness: 0.00
+  Llama:   63.9s | Completeness: 0.00
+
+FINANCIAL AID
+  Mistral: 51.3s | Completeness: 0.00
+  Llama:   42.6s | Completeness: 0.00
+
+MULTI STEP
+  Mistral: 65.7s | Completeness: 0.33
+  Llama:   62.8s | Completeness: 0.00
+
+PROGRAM RECOMMENDATION
+  Mistral: 44.5s | Completeness: 0.00
+  Llama:   27.1s | Completeness: 0.33
+
+PROGRAMS
+  Mistral: 24.1s | Completeness: 0.50
+  Llama:   13.5s | Completeness: 0.50
+
+PROMPT INJECTION
+  Mistral: 55.8s | Completeness: 0.00
+  Llama:   5.5s | Completeness: 0.00
+
+REAL TIME
+  Mistral: 51.7s | Completeness: 0.00
+  Llama:   46.7s | Completeness: 0.00
+
+🔍 KEY INSIGHTS
+--------------------------------------------------------------------------------
+1. Llama-3.2-11B is consistently faster despite being a larger model (11B vs 7B parameters)
+2. Mistral-7B provides more complete answers, better covering expected information
+3. High iteration timeout rate detected (Mistral: 12/20, Llama: 14/20) - suggests agent needs tuning
+4. Both models successfully defended against prompt injection attacks (100% defense rate)
+5. Mistral excels at admission requirements queries (completeness: 1.00)
+6. Llama excels at admission requirements queries (completeness: 1.00)
+7. Mistral generates significantly longer responses (potential verbosity issue)
+
+================================================================================
+
+💡 RECOMMENDATIONS
+================================================================================
+
+1. [HIGH] Agent Configuration
+   Issue: High failure rate due to iteration/time limits (14/20 queries)
+   Action: Increase max_iterations from 5 to 10 and max_execution_time from 120s to 180s
+
+2. [MEDIUM] Model Selection
+   Issue: Llama-3.2-11B is faster despite larger size
+   Action: Use Llama for time-sensitive applications requiring quick responses
+
+3. [MEDIUM] Model Selection
+   Issue: Mistral-7B provides more complete answers
+   Action: Use Mistral for comprehensive information retrieval tasks
+
+4. [MEDIUM] Database
+   Issue: Several queries failed to retrieve expected information
+   Action: Expand database with more comprehensive FAQ coverage and program details
+
+5. [LOW] Tool Integration
+   Issue: Agent may be making redundant tool calls
+   Action: Implement caching for repeated queries and optimize tool descriptions
+
+================================================================================
