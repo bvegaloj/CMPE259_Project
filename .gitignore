@@ -34,10 +34,10 @@ models/
 *.gguf
 *.pth
 
-# Database
-*.db
-*.sqlite
-*.sqlite3
+# Database (exclude the main SJSU database - we need it!)
+# *.db
+# *.sqlite
+# *.sqlite3
 
 # Logs
 logs/
