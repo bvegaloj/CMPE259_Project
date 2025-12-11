@@ -4,21 +4,22 @@ An intelligent virtual assistant for San Jose State University (SJSU) that answe
 
 ## Overview
 
-This project implements a production-ready ReAct (Reasoning + Acting) AI agent that combines:
-- **SQLite Database with FTS5**: Fast full-text search on structured SJSU data (76 records including programs, courses, prerequisites, deadlines)
-- **Tavily Web Search**: AI-powered web search with automatic fallback for courses/info not in database
-- **Groq Llama-3.3-70B**: Lightning-fast cloud inference (~2s average response time)
-- **Streamlit UI**: Clean, professional web interface with SJSU branding
-- **Anti-Hallucination**: Enhanced prompts and validation to ensure accurate responses
+This project implements a ReAct-based AI agent that combines:
+- **Database Search**: Query structured SJSU data (programs, courses, deadlines, contact info)
+- **Web Search**: Real-time information retrieval from the web using Tavily API
+- **LLM Backend**: Support for both local models (Ollama) and cloud APIs (Groq)
+- **Interactive UI**: Streamlit-based web interface for easy interaction
 
-## Key Features
+## Features
 
-✅ **Accurate Prerequisites**: Returns exact course prerequisites from database  
-✅ **Automatic Web Fallback**: Uses Tavily AI search when course not in database  
-✅ **No Hallucination**: Admits limitations when information is unavailable  
-✅ **Fast Response**: ~2 seconds average with Groq Llama-3.3-70B  
-✅ **Comprehensive Data**: 76 records covering CMPE courses, programs, FAQs, resources  
-✅ **Production Ready**: Fully tested ReAct loop with proper error handling
+- Natural language question answering about SJSU
+- Multi-tool agent with database and web search capabilities
+- Support for multiple LLM backends:
+  - Groq API (Llama-3.3-70B) - Fast cloud inference
+  - Ollama (Local Mistral-7B, Llama-3.2-11B) - Privacy-focused local inference
+- Clean, professional web UI with SJSU branding
+- Comprehensive evaluation framework for model comparison
+- Organized test suite for reliability
 
 ## Quick Start
 
