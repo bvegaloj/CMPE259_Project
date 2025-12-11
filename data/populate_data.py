@@ -337,10 +337,8 @@ def populate_sample_data():
 
 
 if __name__ == "__main__":
-    # Initialize database and populate with sample data
-    db = DatabaseManager()
-    db.initialize_database()
+    # Populate database with sample data
     populate_sample_data()
     
-    print("\nDatabase initialized and populated successfully!")
-    print(f"Database location: {db.db_path}")
+    print("\nDatabase populated successfully!")
+    print(f"Database location: ./data/sjsu_database.db")
