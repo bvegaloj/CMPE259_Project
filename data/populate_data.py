@@ -7,6 +7,7 @@ def populate_sample_data():
     """Populate database with sample SJSU data"""
     
     db = DatabaseManager()
+    cursor = db.connection.cursor()
     
     print("Populating sample data")
     
@@ -48,7 +49,8 @@ def populate_sample_data():
         INSERT INTO programs (program_name, degree_type, department, description, website_url)
         VALUES (?, ?, ?, ?, ?)
     """
-    db.execute_many(sql, programs_data)
+    cursor.executemany(sql, programs_data)
+    db.connection.commit()
     print(f"Inserted {len(programs_data)} programs")
     
     # Admission Requirements
@@ -71,7 +73,8 @@ def populate_sample_data():
          gre_verbal, gre_quantitative, additional_requirements)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     """
-    db.execute_many(sql, admission_reqs)
+    cursor.executemany(sql, admission_reqs)
+    db.connection.commit()
     print(f"Inserted {len(admission_reqs)} admission requirements")
     
     # Prerequisites
@@ -98,7 +101,8 @@ def populate_sample_data():
          corequisite_courses, description, units)
         VALUES (?, ?, ?, ?, ?, ?, ?)
     """
-    db.execute_many(sql, prerequisites)
+    cursor.executemany(sql, prerequisites)
+    db.connection.commit()
     print(f"Inserted {len(prerequisites)} prerequisites")
     
     # Deadlines
@@ -120,7 +124,8 @@ def populate_sample_data():
         (semester, year, deadline_type, deadline_date, description, applies_to)
         VALUES (?, ?, ?, ?, ?, ?)
     """
-    db.execute_many(sql, deadlines)
+    cursor.executemany(sql, deadlines)
+    db.connection.commit()
     print(f"Inserted {len(deadlines)} deadlines")
     
     # Campus Resources
@@ -173,7 +178,8 @@ def populate_sample_data():
          phone, email, hours, website_url)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """
-    db.execute_many(sql, resources)
+    cursor.executemany(sql, resources)
+    db.connection.commit()
     print(f"Inserted {len(resources)} campus resources")
     
     # FAQs
@@ -263,7 +269,8 @@ def populate_sample_data():
         INSERT INTO faqs (question, answer, category, keywords, related_resource_id)
         VALUES (?, ?, ?, ?, ?)
     """
-    db.execute_many(sql, faqs)
+    cursor.executemany(sql, faqs)
+    db.connection.commit()
     print(f"Inserted {len(faqs)} FAQs")
     
     # Student Clubs
@@ -302,7 +309,8 @@ def populate_sample_data():
         (club_name, category, department, description, contact_email, meeting_schedule, website_url)
         VALUES (?, ?, ?, ?, ?, ?, ?)
     """
-    db.execute_many(sql, clubs)
+    cursor.executemany(sql, clubs)
+    db.connection.commit()
     print(f"Inserted {len(clubs)} student clubs")
     
     # Scholarships
@@ -330,7 +338,8 @@ def populate_sample_data():
          deadline, application_url, description, renewable)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """
-    db.execute_many(sql, scholarships)
+    cursor.executemany(sql, scholarships)
+    db.connection.commit()
     print(f"Inserted {len(scholarships)} scholarships")
     
     print("Sample data population complete!")
