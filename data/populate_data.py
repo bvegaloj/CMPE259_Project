@@ -9,6 +9,15 @@ def populate_sample_data():
     db = DatabaseManager()
     cursor = db.connection.cursor()
     
+    # Clear existing data to avoid duplicates
+    print("Clearing existing data...")
+    tables = ['scholarships', 'student_clubs', 'faqs', 'campus_resources', 
+              'deadlines', 'prerequisites', 'admission_requirements', 'programs']
+    for table in tables:
+        cursor.execute(f"DELETE FROM {table}")
+    db.connection.commit()
+    print("Existing data cleared")
+    
     print("Populating sample data")
     
     # Programs
