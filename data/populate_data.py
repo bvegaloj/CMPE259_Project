@@ -1,7 +1,6 @@
 """Sample data population script for SJSU database"""
 
 from src.database.db_manager import DatabaseManager
-from src.utils.logger import logger
 
 
 def populate_sample_data():
@@ -9,7 +8,7 @@ def populate_sample_data():
     
     db = DatabaseManager()
     
-    logger.info("Populating sample data")
+    print("Populating sample data")
     
     # Programs
     programs_data = [
@@ -50,7 +49,7 @@ def populate_sample_data():
         VALUES (?, ?, ?, ?, ?)
     """
     db.execute_many(sql, programs_data)
-    logger.info(f"Inserted {len(programs_data)} programs")
+    print(f"Inserted {len(programs_data)} programs")
     
     # Admission Requirements
     admission_reqs = [
@@ -73,7 +72,7 @@ def populate_sample_data():
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     """
     db.execute_many(sql, admission_reqs)
-    logger.info(f"Inserted {len(admission_reqs)} admission requirements")
+    print(f"Inserted {len(admission_reqs)} admission requirements")
     
     # Prerequisites
     prerequisites = [
@@ -100,7 +99,7 @@ def populate_sample_data():
         VALUES (?, ?, ?, ?, ?, ?, ?)
     """
     db.execute_many(sql, prerequisites)
-    logger.info(f"Inserted {len(prerequisites)} prerequisites")
+    print(f"Inserted {len(prerequisites)} prerequisites")
     
     # Deadlines
     deadlines = [
@@ -122,7 +121,7 @@ def populate_sample_data():
         VALUES (?, ?, ?, ?, ?, ?)
     """
     db.execute_many(sql, deadlines)
-    logger.info(f"Inserted {len(deadlines)} deadlines")
+    print(f"Inserted {len(deadlines)} deadlines")
     
     # Campus Resources
     resources = [
@@ -175,7 +174,7 @@ def populate_sample_data():
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """
     db.execute_many(sql, resources)
-    logger.info(f"Inserted {len(resources)} campus resources")
+    print(f"Inserted {len(resources)} campus resources")
     
     # FAQs
     faqs = [
@@ -265,7 +264,7 @@ def populate_sample_data():
         VALUES (?, ?, ?, ?, ?)
     """
     db.execute_many(sql, faqs)
-    logger.info(f"Inserted {len(faqs)} FAQs")
+    print(f"Inserted {len(faqs)} FAQs")
     
     # Student Clubs
     clubs = [
@@ -304,7 +303,7 @@ def populate_sample_data():
         VALUES (?, ?, ?, ?, ?, ?, ?)
     """
     db.execute_many(sql, clubs)
-    logger.info(f"Inserted {len(clubs)} student clubs")
+    print(f"Inserted {len(clubs)} student clubs")
     
     # Scholarships
     scholarships = [
@@ -332,9 +331,9 @@ def populate_sample_data():
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """
     db.execute_many(sql, scholarships)
-    logger.info(f"Inserted {len(scholarships)} scholarships")
+    print(f"Inserted {len(scholarships)} scholarships")
     
-    logger.info("Sample data population complete!")
+    print("Sample data population complete!")
 
 
 if __name__ == "__main__":
