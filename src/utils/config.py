@@ -18,7 +18,7 @@ class Config:
         'model_name': 'llama-3.3-70b-versatile',
         'temperature': 0.7,
         'max_tokens': 1024,
-        'max_iterations': 5,
+        'max_iterations': 10,
         'db_path': './data/chroma_db',
         'embedding_model': 'all-MiniLM-L6-v2',
         'ollama_base_url': 'http://localhost:11434'
