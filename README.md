@@ -192,7 +192,7 @@ The agent uses a **ReAct (Reasoning + Acting)** framework with anti-hallucinatio
 3. **Observation**: Agent observes tool output
 4. **Auto-Fallback**: If course not in database, automatically triggers Tavily web search
 5. **Validation**: Enhanced parser prioritizes Action before Final Answer to prevent hallucination
-6. **Repeat**: Continue until answer is found (max 5 iterations)
+6. **Repeat**: Continue until answer is found (max 10 iterations)
 
 ### Data Flow
 
