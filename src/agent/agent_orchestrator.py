@@ -99,11 +99,8 @@ class AgentOrchestrator:
                         step['observation'] = observation
                         
                         # Print full observation for debugging
-                        print(f"\n{'='*80}")
                         print(f"TOOL OBSERVATION FOR LLM:")
-                        print(f"{'='*80}")
                         print(observation)
-                        print(f"{'='*80}\n")
                         
                         # Print truncated version for console
                         print(f"Observation: {observation[:200]}..." if len(str(observation)) > 200 else f"Observation: {observation}")
@@ -111,7 +108,7 @@ class AgentOrchestrator:
                         # AUTO-FALLBACK: If database_query returns "No information found" and it's about a course,
                         # automatically try web_search with Tavily
                         if action == 'database_query' and 'No information found' in observation:
-                            print("\n⚠️  Database returned no results - automatically trying web_search with Tavily...")
+                            print("\nDatabase returned no results - automatically trying web_search with Tavily")
                             # Extract course code from observation
                             import re
                             course_match = re.search(r'([A-Z]{2,4}\s*\d{3})', observation)
@@ -126,7 +123,7 @@ class AgentOrchestrator:
                                     step['action'] = 'web_search'
                                     step['action_input'] = web_search_query
                                     step['observation'] = observation
-                                    print(f"✓ Web search completed for {course_code}")
+                                    print(f"Web search completed for {course_code}")
                                 except Exception as web_error:
                                     observation = f"Could not find information for {course_code}. Please check the official SJSU catalog: https://catalog.sjsu.edu"
                                     step['observation'] = observation
@@ -248,10 +245,18 @@ CRITICAL RULES - READ CAREFULLY:
         if action_match:
             action = action_match.group(1).strip()
         
-        # Look for Action Input
-        input_match = re.search(r'Action Input:\s*(.+?)(?:\n(?:Observation|Thought|Final Answer)|\Z)', response, re.IGNORECASE | re.DOTALL)
+        # Look for Action Input - improved regex to handle multi-line and stop at various markers
+        input_match = re.search(r'Action Input:\s*["\']?(.+?)["\']?\s*(?:\n\s*(?:Observation|Thought|Final Answer|Action)|\Z)', response, re.IGNORECASE | re.DOTALL)
         if input_match:
             action_input = input_match.group(1).strip()
+            # Clean up the action input - remove any trailing "Observation:" or similar
+            action_input = re.sub(r'\s*Observation\s*:.*$', '', action_input, flags=re.IGNORECASE | re.DOTALL)
+            action_input = re.sub(r'\s*Thought\s*:.*$', '', action_input, flags=re.IGNORECASE | re.DOTALL)
+            # Remove quotes if present
+            action_input = action_input.strip('"\'')
+            # Limit length to prevent long queries
+            if len(action_input) > 200:
+                action_input = action_input[:200]
         
         # If we found an action, return it (ignore any Final Answer that comes after)
         if action and action_input:

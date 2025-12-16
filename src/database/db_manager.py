@@ -46,7 +46,7 @@ class DatabaseManager:
     
     def query(self, query_text: str, n_results: int = 5) -> List[Dict[str, Any]]:
         """
-        Query the database using full-text search on FAQs table
+        Query the database using intelligent table selection based on query content
         
         Args:
             query_text: Query string
@@ -57,87 +57,209 @@ class DatabaseManager:
         """
         results = []
         cursor = self.connection.cursor()
+        query_lower = query_text.lower()
         
-        try:
-            # Search FAQs using FTS table
+        # Determine which tables to search based on query content
+        search_scholarships = any(word in query_lower for word in ['scholarship', 'financial aid', 'funding', 'grant', 'award'])
+        search_deadlines = any(word in query_lower for word in ['deadline', 'due date', 'when', 'application date'])
+        search_programs = any(word in query_lower for word in ['program', 'major', 'degree', 'department'])
+        search_admission = any(word in query_lower for word in ['admission', 'requirement', 'gpa', 'apply', 'eligibility'])
+        search_clubs = 'club' in query_lower or 'organization' in query_lower
+        search_resources = any(word in query_lower for word in ['resource', 'service', 'health', 'career', 'library', 'counseling']) and not search_clubs
+        search_prerequisites = any(word in query_lower for word in ['prerequisite', 'prereq', 'course', 'class']) or \
+                               bool(__import__('re').search(r'\b[A-Z]{2,4}\s*\d{3}\b', query_text.upper()))
+        
+        # Search student clubs FIRST if query is about clubs
+        if search_clubs and len(results) < n_results:
             cursor.execute("""
-                SELECT f.question, f.answer, f.category
-                FROM faqs f
-                JOIN faqs_fts fts ON f.faq_id = fts.rowid
-                WHERE faqs_fts MATCH ?
+                SELECT club_name, category, department, description, contact_email, meeting_schedule
+                FROM student_clubs
                 LIMIT ?
-            """, (query_text, n_results))
+            """, (n_results - len(results),))
             
             for row in cursor.fetchall():
                 results.append({
-                    'content': f"Q: {row['question']}\nA: {row['answer']}",
-                    'category': row['category'] or 'general',
-                    'source': 'faq',
-                    'score': 0.9
+                    'content': f"Club: {row['club_name']}\nCategory: {row['category']}\nDepartment: {row['department'] or 'University-wide'}\nDescription: {row['description'] or ''}\nContact: {row['contact_email'] or 'N/A'}\nMeetings: {row['meeting_schedule'] or 'Check website'}",
+                    'category': 'student_clubs',
+                    'source': 'student_clubs',
+                    'score': 0.95
                 })
-        except Exception as e:
-            # If FTS fails, fall back to LIKE search
-            print(f"FTS search failed, using LIKE: {e}")
+        
+        # Search scholarships table if relevant
+        if search_scholarships and len(results) < n_results:
             cursor.execute("""
-                SELECT question, answer, category
-                FROM faqs
-                WHERE LOWER(question) LIKE ? OR LOWER(answer) LIKE ?
+                SELECT scholarship_name, amount, eligibility, deadline, description, min_gpa, major_restriction
+                FROM scholarships
                 LIMIT ?
-            """, (f'%{query_text.lower()}%', f'%{query_text.lower()}%', n_results))
+            """, (n_results,))
+            
+            for row in cursor.fetchall():
+                gpa_req = f"Min GPA: {row['min_gpa']}" if row['min_gpa'] else ""
+                major_req = f"Major: {row['major_restriction']}" if row['major_restriction'] else ""
+                results.append({
+                    'content': f"Scholarship: {row['scholarship_name']}\nAmount: ${row['amount']}\nEligibility: {row['eligibility']}\nDeadline: {row['deadline']}\n{gpa_req}\n{major_req}\nDescription: {row['description'] or ''}",
+                    'category': 'financial_aid',
+                    'source': 'scholarships',
+                    'score': 0.95
+                })
+        
+        # Search deadlines if relevant
+        if search_deadlines and len(results) < n_results:
+            cursor.execute("""
+                SELECT deadline_type, deadline_date, semester, description, applies_to
+                FROM deadlines
+                ORDER BY deadline_date
+                LIMIT ?
+            """, (n_results - len(results),))
             
             for row in cursor.fetchall():
                 results.append({
-                    'content': f"Q: {row['question']}\nA: {row['answer']}",
-                    'category': row['category'] or 'general',
-                    'source': 'faq',
+                    'content': f"Deadline: {row['deadline_type']}\nDate: {row['deadline_date']}\nSemester: {row['semester']}\nApplies to: {row['applies_to'] or 'All students'}\nDetails: {row['description'] or ''}",
+                    'category': 'deadlines',
+                    'source': 'deadlines',
                     'score': 0.9
                 })
         
-        # If not enough results, search prerequisites
-        if len(results) < n_results:
-            keywords = query_text.lower().split()
-            for keyword in keywords:
-                cursor.execute("""
-                    SELECT course_code, course_name, prerequisite_courses, description
-                    FROM prerequisites
-                    WHERE LOWER(course_code) LIKE ? OR LOWER(course_name) LIKE ? OR LOWER(description) LIKE ?
-                    LIMIT ?
-                """, (f'%{keyword}%', f'%{keyword}%', f'%{keyword}%', n_results - len(results)))
-                
-                for row in cursor.fetchall():
-                    prereqs = row['prerequisite_courses'] or 'None'
-                    desc = row['description'] or ''
-                    results.append({
-                        'content': f"{row['course_code']} - {row['course_name']}: Prerequisites: {prereqs}. {desc}",
-                        'category': 'academics',
-                        'source': 'prerequisites',
-                        'score': 0.8
-                    })
-                    
-                    if len(results) >= n_results:
-                        break
+        # Search admission requirements if relevant
+        if search_admission and len(results) < n_results:
+            cursor.execute("""
+                SELECT ar.*, p.program_name 
+                FROM admission_requirements ar
+                LEFT JOIN programs p ON ar.program_id = p.program_id
+                LIMIT ?
+            """, (n_results - len(results),))
+            
+            for row in cursor.fetchall():
+                program = row['program_name'] or f"Program ID {row['program_id']}"
+                gpa_info = f"Min GPA: {row['min_gpa']}" if row['min_gpa'] else ""
+                gre_info = "GRE Required" if row['gre_required'] else "GRE Not Required"
+                results.append({
+                    'content': f"Program: {program}\nDegree Level: {row['degree_level']}\n{gpa_info}\n{gre_info}\nAdditional: {row['additional_requirements'] or 'None'}",
+                    'category': 'admission',
+                    'source': 'admission_requirements',
+                    'score': 0.9
+                })
         
-        # If still not enough, search programs
+        # Search campus resources if relevant
+        if search_resources and len(results) < n_results:
+            cursor.execute("""
+                SELECT resource_name, category, location, building, phone, email, hours, description
+                FROM campus_resources
+                LIMIT ?
+            """, (n_results - len(results),))
+            
+            for row in cursor.fetchall():
+                location_info = f"{row['building'] or ''} {row['location'] or ''}".strip()
+                contact_info = f"Phone: {row['phone'] or 'N/A'}, Email: {row['email'] or 'N/A'}"
+                results.append({
+                    'content': f"Resource: {row['resource_name']}\nCategory: {row['category']}\nLocation: {location_info}\nContact: {contact_info}\nHours: {row['hours'] or 'Check website'}\nDescription: {row['description'] or ''}",
+                    'category': 'campus_resources',
+                    'source': 'campus_resources',
+                    'score': 0.85
+                })
+        
+        # Search FAQs using FTS table
         if len(results) < n_results:
-            keywords = query_text.lower().split()
-            for keyword in keywords:
+            try:
                 cursor.execute("""
-                    SELECT program_name, degree_type, department, description
-                    FROM programs
-                    WHERE LOWER(program_name) LIKE ? OR LOWER(description) LIKE ?
+                    SELECT f.question, f.answer, f.category
+                    FROM faqs f
+                    JOIN faqs_fts fts ON f.faq_id = fts.rowid
+                    WHERE faqs_fts MATCH ?
                     LIMIT ?
-                """, (f'%{keyword}%', f'%{keyword}%', n_results - len(results)))
+                """, (query_text, n_results - len(results)))
                 
                 for row in cursor.fetchall():
                     results.append({
-                        'content': f"{row['program_name']} ({row['degree_type']}): {row['description'] or ''}",
-                        'category': 'academics',
-                        'source': 'programs',
-                        'score': 0.7
+                        'content': f"Q: {row['question']}\nA: {row['answer']}",
+                        'category': row['category'] or 'general',
+                        'source': 'faq',
+                        'score': 0.9
                     })
+            except Exception as e:
+                # If FTS fails, fall back to LIKE search on FAQs
+                print(f"FTS search failed, using LIKE: {e}")
+                cursor.execute("""
+                    SELECT question, answer, category
+                    FROM faqs
+                    WHERE LOWER(question) LIKE ? OR LOWER(answer) LIKE ?
+                    LIMIT ?
+                """, (f'%{query_text.lower()}%', f'%{query_text.lower()}%', n_results - len(results)))
+                
+                for row in cursor.fetchall():
+                    results.append({
+                        'content': f"Q: {row['question']}\nA: {row['answer']}",
+                        'category': row['category'] or 'general',
+                        'source': 'faq',
+                        'score': 0.9
+                    })
+        
+        # Only search prerequisites if query is about courses/prerequisites
+        if search_prerequisites and len(results) < n_results:
+            import re
+            # Look for course codes in query
+            course_pattern = r'\b([A-Z]{2,4})\s*(\d{3})\b'
+            course_matches = re.findall(course_pattern, query_text.upper())
+            
+            if course_matches:
+                # Search for specific course codes
+                for dept, num in course_matches:
+                    course_code = f"{dept} {num}"
+                    cursor.execute("""
+                        SELECT course_code, course_name, prerequisite_courses, description
+                        FROM prerequisites
+                        WHERE course_code = ? OR course_code = ?
+                        LIMIT ?
+                    """, (course_code, course_code.replace(' ', ''), n_results - len(results)))
                     
-                    if len(results) >= n_results:
-                        break
+                    for row in cursor.fetchall():
+                        prereqs = row['prerequisite_courses'] or 'None'
+                        desc = row['description'] or ''
+                        results.append({
+                            'content': f"{row['course_code']} - {row['course_name']}: Prerequisites: {prereqs}. {desc}",
+                            'category': 'academics',
+                            'source': 'prerequisites',
+                            'score': 0.95
+                        })
+            else:
+                # General prerequisite search - only with specific keywords
+                specific_keywords = ['prerequisite', 'prereq']
+                for keyword in specific_keywords:
+                    if keyword in query_lower:
+                        cursor.execute("""
+                            SELECT course_code, course_name, prerequisite_courses, description
+                            FROM prerequisites
+                            LIMIT ?
+                        """, (n_results - len(results),))
+                        
+                        for row in cursor.fetchall():
+                            prereqs = row['prerequisite_courses'] or 'None'
+                            desc = row['description'] or ''
+                            results.append({
+                                'content': f"{row['course_code']} - {row['course_name']}: Prerequisites: {prereqs}. {desc}",
+                                'category': 'academics',
+                                'source': 'prerequisites',
+                                'score': 0.8
+                            })
+                            
+                            if len(results) >= n_results:
+                                break
+        
+        # Search programs only if relevant and not enough results
+        if search_programs and len(results) < n_results:
+            cursor.execute("""
+                SELECT program_name, degree_type, department, description
+                FROM programs
+                LIMIT ?
+            """, (n_results - len(results),))
+            
+            for row in cursor.fetchall():
+                results.append({
+                    'content': f"{row['program_name']} ({row['degree_type']}): {row['description'] or ''}",
+                    'category': 'academics',
+                    'source': 'programs',
+                    'score': 0.7
+                })
                         
         return results[:n_results]
     

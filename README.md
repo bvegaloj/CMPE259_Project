@@ -23,6 +23,27 @@ This project implements a ReAct-based AI agent that combines:
 
 ## Quick Start
 
+### Option A: Google Colab (Recommended for Quick Demo)
+
+Run the project directly in your browser without any local setup:
+
+1. Open the Colab notebook: [colab_setup.ipynb](colab_setup.ipynb)
+2. Click "Open in Colab" or upload to Google Colab
+3. Add your API keys to Colab Secrets:
+   - Click the key icon in the left sidebar
+   - Add `GROQ_API_KEY`, `TAVILY_API_KEY`, and `NGROK_API_KEY`
+4. Run all cells (Runtime > Run all)
+5. Access the UI via the ngrok public URL displayed
+
+The notebook will automatically:
+- Clone the repository
+- Install all dependencies
+- Populate the database
+- Launch Streamlit with ngrok tunnel
+- Provide a public URL to access the UI
+
+### Option B: Local Installation
+
 ### 1. Installation
 
 ```bash
@@ -73,44 +94,6 @@ streamlit run ui/streamlit_app.py
 ```
 
 The UI will open in your browser at `http://localhost:8501`
-
-## Project Structure
-
-```
-CMPE259_Project/
-├── src/                    # Source code
-│   ├── agent/             # ReAct agent orchestration
-│   │   └── agent_orchestrator.py  # Main agent with anti-hallucination logic
-│   ├── llm/               # LLM client wrappers
-│   │   ├── groq_llama_model.py    # Groq Llama-3.3-70B (recommended)
-│   │   └── model_loader.py         # Dynamic model loading
-│   ├── tools/             # Agent tools
-│   │   ├── database_tool.py        # SQLite FTS5 search with course validation
-│   │   └── web_search_tool.py      # Tavily AI-powered search
-│   ├── database/          # Database layer
-│   │   └── db_manager.py           # SQLite with FTS5 full-text search
-│   └── utils/             # Utilities
-├── ui/                    # Streamlit web interface
-│   └── streamlit_app.py   # Main UI with SJSU branding
-├── data/                  # SJSU data
-│   ├── sjsu_database.db   # SQLite database (76 records)
-│   └── queries/           # Test queries for evaluation
-├── evaluation/            # Evaluation framework
-│   ├── scripts/          # Evaluation scripts
-│   │   ├── evaluator_custom.py     # Custom query evaluation
-│   │   ├── evaluator_groq.py       # Groq vs local comparison
-│   │   ├── evaluator_llama_groq.py # Groq Llama evaluation
-│   │   └── groq_speed_test.py      # Performance testing
-│   ├── metrics.py        # Evaluation metrics
-│   └── data/results/     # Evaluation results
-├── demos/                 # Demo scripts
-│   └── demo_agent.py     # CLI demonstration
-├── tests/                 # Organized test suite
-├── requirements.txt       # Python dependencies
-├── setup.py              # Setup script
-├── launch_ui.py          # UI launcher
-└── README.md             # This file
-```
 
 ## Usage Examples
 
@@ -227,37 +210,55 @@ DatabaseTool (SQLite FTS5)
 | Model | Type | Speed | Quality | Use Case |
 |-------|------|-------|---------|----------|
 | Groq Llama-3.3-70B | Cloud API | Very Fast (~2s) | Excellent | **Recommended** for production |
-| Ollama Mistral-7B | Local | Slower (~85s) | Good | Privacy-focused, offline |
-| Ollama Llama-3.2-11B | Local | Moderate (~60s) | Good | Balance of speed/quality |
+| Ollama Mistral-7B | Local | Moderate (~60s) | Very Good | Privacy-focused, offline - **Recommended local option** |
+| Ollama Llama-3.2-11B | Local | Slower (~72s) | Good | Alternative local option |
 
-**Current Configuration**: Groq Llama-3.3-70B with 70x faster inference than local models.
+**Current Configuration**: Groq Llama-3.3-70B with 30x faster inference than local models.
 
 ## Performance
 
-Based on production testing with SQLite FTS5 database + Tavily integration:
+Based on evaluation testing with 20 diverse queries using SQLite FTS5 database + Tavily integration:
 
-**Groq Llama-3.3-70B (Cloud API):**
-- Average response time: **~2 seconds** (database queries: <100ms, web fallback: 1.5-2.5s)
-- Success rate: **100%** on database queries (76 validated records)
-- Accuracy: **Zero hallucination** - system admits when data unavailable or uses web search
-- Coverage: **Complete** - database + automatic web fallback for missing courses
-- Model: 70B parameters, cloud-hosted (14,400 free requests/day)
-- Best for: Production use, fast responses, high accuracy, comprehensive coverage
+### Groq Llama-3.3-70B (Cloud API) - Recommended
+| Metric | Value |
+|--------|-------|
+| Average Response Time | **2.0 seconds** |
+| Success Rate | **100%** (20/20 queries) |
+| Timeout Rate | 0% |
+| Hallucination Instances | 0 |
 
-**Local Ollama Mistral-7B:**
-- Average response time: **171.59s** (range: 61.60s - 224.96s)
-- Success rate: **15%** (3/20 queries) - struggles with ReAct parsing
-- Model: 7B parameters, local inference
-- Note: Requires improved prompt engineering for better reliability
+Best for: Production use, fast responses, high accuracy, comprehensive coverage.
 
-**Local Ollama Llama-3.2-11B:** *(estimated based on model size)*
-- Expected response time: ~60-90s
-- Expected success rate: 70-85%
-- Model: 11B parameters, local inference  
-- Best for: Balance of speed/quality in offline scenarios
+### Ollama Mistral-7B (Local) - Recommended for Privacy
+| Metric | Value |
+|--------|-------|
+| Average Response Time | **59.86 seconds** |
+| Success Rate | **90%** (18/20 queries) |
+| Timeout Rate | 10% (2/20 queries) |
+
+The Mistral-7B model successfully handles most query types with proper tool usage and ReAct format parsing. Recommended for privacy-focused deployments where local execution is preferred.
+
+### Ollama Llama-3.2-11B (Local) - Alternative
+| Metric | Value |
+|--------|-------|
+| Average Response Time | **71.71 seconds** |
+| Success Rate | **85%** (17/20 queries) |
+| Timeout Rate | 15% (3/20 queries) |
+
+Despite being a larger model, Llama-3.2-11B achieves slightly lower success rate than Mistral-7B, likely due to hardware constraints limiting its performance potential.
+
+### Model Comparison Summary
+
+| Metric | Groq Llama-3.3-70B | Ollama Mistral-7B | Ollama Llama-3.2-11B |
+|--------|-------------------|-------------------|---------------------|
+| Response Time | 2.0s | 59.86s | 71.71s |
+| Success Rate | 100% | 90% | 85% |
+| Timeout Rate | 0% | 10% | 15% |
+| Cost | Free tier | Free (local) | Free (local) |
+| Privacy | Cloud-hosted | Local | Local |
 
 ### Recommendation
-**Use Groq Llama-3.3-70B for best results** - it's significantly faster (70x), more reliable (100% vs 15% success), and provides higher quality responses. The free tier is sufficient for most use cases.
+**Use Groq Llama-3.3-70B for best results** - it's significantly faster (30x), more reliable (100% success rate), and provides highest quality responses. For privacy-conscious deployments requiring local execution, **Mistral-7B is recommended** as it outperforms the larger Llama-3.2-11B with better success rate (90% vs 85%) and faster response time.
 
 ## Requirements
 
