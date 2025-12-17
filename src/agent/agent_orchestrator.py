@@ -209,11 +209,28 @@ CRITICAL RULES - READ CAREFULLY:
 12. NEVER make up prerequisites - always use tools first"""
     
     def _build_user_prompt(self, query: str, context: Optional[str] = None) -> str:
-        """Build the initial user prompt"""
-        prompt = f"Question: {query}\n\n"
+        """Build the initial user prompt with few-shot example to prevent first-query hallucination"""
+        # Few-shot example to guide proper tool usage
+        few_shot_example = """Here's an example of how to properly answer a question:
+
+Question: What are the prerequisites for CMPE 259?
+
+Thought: I need to find information about CMPE 259 prerequisites. I should query the SJSU database first.
+Action: database_query
+Action Input: CMPE 259 prerequisites
+Observation: >>> MOST RELEVANT ANSWER >>> CMPE 259 - Deep Learning: Prerequisites: CMPE 252 or CMPE 255 or CMPE 257, or instructor consent.
+Thought: I found the prerequisites in the database. I will provide the exact information.
+Final Answer: The prerequisites for CMPE 259 (Deep Learning) are: CMPE 252 or CMPE 255 or CMPE 257, or instructor consent.
+
+---
+Now answer the following question using the same approach:
+
+"""
+        prompt = few_shot_example
+        prompt += f"Question: {query}\n\n"
         if context:
             prompt += f"Additional Context: {context}\n\n"
-        prompt += "Begin your reasoning:"
+        prompt += "Thought:"
         return prompt
     
     def _update_prompt(self, current_prompt: str, step: Dict[str, Any]) -> str:
