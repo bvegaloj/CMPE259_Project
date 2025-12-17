@@ -170,8 +170,8 @@ class AgentOrchestrator:
                     best_observation = obs
             
             if best_observation:
-                # Extract useful content from observation
-                final_answer = f"Based on the SJSU database: {best_observation[:800]}"
+                # Clean up the observation to create a readable response
+                final_answer = self._format_observation_as_answer(best_observation)
             else:
                 final_answer = reasoning_steps[-1].get('thought', 'Unable to generate response')
         
@@ -327,3 +327,89 @@ Now answer the following question using the same approach:
     def get_conversation_history(self) -> List[Dict[str, str]]:
         """Get current conversation history"""
         return self.conversation_history.copy()
+    
+    def _format_observation_as_answer(self, observation: str) -> str:
+        """
+        Format a raw database observation into a clean, readable response.
+        Extracts the most relevant information and removes metadata markers.
+        """
+        # Extract the first/best result content
+        obs_str = str(observation)
+        
+        # Check if it's a Q&A format (FAQ)
+        if 'Q:' in obs_str and 'A:' in obs_str:
+            # Extract the answer from FAQ format
+            match = re.search(r'A:\s*(.+?)(?:\n\nResult|\Z)', obs_str, re.DOTALL)
+            if match:
+                answer = match.group(1).strip()
+                return answer
+        
+        # Check if it's a course/prerequisite format
+        if 'Prerequisites:' in obs_str:
+            # Extract course info
+            course_match = re.search(r'([A-Z]{2,4}\s*\d{3})\s*-\s*([^:]+):\s*Prerequisites:\s*([^.]+\.?)', obs_str)
+            if course_match:
+                course_code = course_match.group(1)
+                course_name = course_match.group(2).strip()
+                prereqs = course_match.group(3).strip()
+                return f"The prerequisites for {course_code} ({course_name}) are: {prereqs}"
+        
+        # Check if it's a scholarship format
+        if 'Scholarship:' in obs_str:
+            scholarships = []
+            for match in re.finditer(r'Scholarship:\s*([^\n]+)\nAmount:\s*\$?([\d,]+)', obs_str):
+                name = match.group(1).strip()
+                amount = match.group(2).strip()
+                scholarships.append(f"• {name} (${amount})")
+            if scholarships:
+                return "Available scholarships:\n" + "\n".join(scholarships[:5])
+        
+        # Check if it's a club format
+        if 'Club:' in obs_str:
+            clubs = []
+            for match in re.finditer(r'Club:\s*([^\n]+)\n.*?Description:\s*([^\n]+)', obs_str, re.DOTALL):
+                name = match.group(1).strip()
+                desc = match.group(2).strip()
+                clubs.append(f"• {name}: {desc}")
+            if clubs:
+                return "Student clubs:\n" + "\n".join(clubs[:5])
+        
+        # Check if it's a deadline format
+        if 'Deadline:' in obs_str:
+            deadlines = []
+            for match in re.finditer(r'Deadline:\s*([^\n]+)\nDate:\s*([^\n]+)', obs_str):
+                dtype = match.group(1).strip()
+                date = match.group(2).strip()
+                deadlines.append(f"• {dtype}: {date}")
+            if deadlines:
+                return "Important deadlines:\n" + "\n".join(deadlines[:5])
+        
+        # Check if it's a resource format
+        if 'Resource:' in obs_str:
+            resources = []
+            for match in re.finditer(r'Resource:\s*([^\n]+)\n.*?Description:\s*([^\n]+)', obs_str, re.DOTALL):
+                name = match.group(1).strip()
+                desc = match.group(2).strip()
+                resources.append(f"• {name}: {desc}")
+            if resources:
+                return "Campus resources:\n" + "\n".join(resources[:5])
+        
+        # Check if it's a program format
+        if 'Program:' in obs_str or '(MS):' in obs_str or '(BS):' in obs_str:
+            # Extract program info
+            match = re.search(r'([^:]+\([A-Z]{2,3}\)):\s*(.+?)(?:\n\nResult|\Z)', obs_str, re.DOTALL)
+            if match:
+                return f"{match.group(1)}: {match.group(2).strip()[:300]}"
+        
+        # Fallback: Clean up raw observation
+        # Remove markers and metadata
+        cleaned = re.sub(r'>>>\s*MOST RELEVANT ANSWER\s*>>>', '', obs_str)
+        cleaned = re.sub(r'Result \d+ \[[^\]]+\] \(relevance: [\d.]+\):', '', cleaned)
+        cleaned = re.sub(r'\n\s*\n', '\n', cleaned)  # Remove extra blank lines
+        cleaned = cleaned.strip()
+        
+        # Return first 500 chars of cleaned content
+        if len(cleaned) > 500:
+            cleaned = cleaned[:500] + "..."
+        
+        return cleaned if cleaned else "I found relevant information but couldn't format it properly. Please try rephrasing your question."
