@@ -59,17 +59,40 @@ class DatabaseManager:
         cursor = self.connection.cursor()
         query_lower = query_text.lower()
         
+        # Check if this is a LOCATION query (where, located, building, address, find)
+        is_location_query = any(word in query_lower for word in ['where', 'location', 'located', 'building', 'address', 'find', 'directions'])
+        
         # Determine which tables to search based on query content
-        search_scholarships = any(word in query_lower for word in ['scholarship', 'financial aid', 'funding', 'grant', 'award'])
+        # For location queries, prioritize campus_resources over scholarships
+        search_scholarships = any(word in query_lower for word in ['scholarship', 'financial aid', 'funding', 'grant', 'award']) and not is_location_query
         search_deadlines = any(word in query_lower for word in ['deadline', 'due date', 'when', 'application date'])
-        search_programs = any(word in query_lower for word in ['program', 'major', 'degree', 'department'])
+        search_programs = any(word in query_lower for word in ['program', 'major', 'degree', 'department']) and not is_location_query
         search_admission = any(word in query_lower for word in ['admission', 'requirement', 'gpa', 'apply', 'eligibility'])
         search_clubs = 'club' in query_lower or 'organization' in query_lower
-        search_resources = any(word in query_lower for word in ['resource', 'service', 'health', 'career', 'library', 'counseling']) and not search_clubs
+        # For location queries, always search resources
+        search_resources = is_location_query or (any(word in query_lower for word in ['resource', 'service', 'health', 'career', 'library', 'counseling', 'office', 'center']) and not search_clubs)
         search_prerequisites = any(word in query_lower for word in ['prerequisite', 'prereq', 'course', 'class']) or \
                                bool(__import__('re').search(r'\b[A-Z]{2,4}\s*\d{3}\b', query_text.upper()))
         
-        # Search student clubs FIRST if query is about clubs
+        # PRIORITY 1: Search campus resources FIRST for location queries
+        if is_location_query and len(results) < n_results:
+            cursor.execute("""
+                SELECT resource_name, category, location, building, phone, email, hours, description
+                FROM campus_resources
+                LIMIT ?
+            """, (n_results,))
+            
+            for row in cursor.fetchall():
+                location_info = f"{row['building'] or ''} {row['location'] or ''}".strip()
+                contact_info = f"Phone: {row['phone'] or 'N/A'}, Email: {row['email'] or 'N/A'}"
+                results.append({
+                    'content': f"Resource: {row['resource_name']}\nCategory: {row['category']}\nLocation: {location_info}\nContact: {contact_info}\nHours: {row['hours'] or 'Check website'}\nDescription: {row['description'] or ''}",
+                    'category': 'campus_resources',
+                    'source': 'campus_resources',
+                    'score': 0.95
+                })
+        
+        # Search student clubs if query is about clubs
         if search_clubs and len(results) < n_results:
             cursor.execute("""
                 SELECT club_name, category, department, description, contact_email, meeting_schedule
