@@ -116,27 +116,53 @@ class AgentOrchestrator:
                         # Print truncated version for console
                         print(f"Observation: {observation[:200]}..." if len(str(observation)) > 200 else f"Observation: {observation}")
                         
-                        # AUTO-FALLBACK: If database_query returns "No information found" and it's about a course,
-                        # automatically try web_search with Tavily
-                        if action == 'database_query' and 'No information found' in observation:
-                            print("\nDatabase returned no results - automatically trying web_search with Tavily")
-                            # Extract course code from observation
-                            import re
-                            course_match = re.search(r'([A-Z]{2,4}\s*\d{3})', observation)
-                            if course_match:
-                                course_code = course_match.group(1)
-                                print(f"   Searching web for {course_code} prerequisites...\n")
+                        # AUTO-FALLBACK: Check if database results are relevant to the query
+                        if action == 'database_query':
+                            should_fallback = False
+                            fallback_reason = ""
+                            
+                            # Case 1: No results found
+                            if 'No information found' in observation:
+                                should_fallback = True
+                                fallback_reason = "no results"
+                            
+                            # Case 2: Results don't match query keywords (irrelevant results)
+                            else:
+                                # Extract key terms from original query
+                                query_lower = query.lower()
+                                obs_lower = observation.lower()
                                 
-                                # Automatically trigger web search with Tavily
-                                web_search_query = f"SJSU {course_code} course prerequisites requirements"
+                                # Check for specific terms that should appear in results
+                                key_terms = []
+                                if 'financial aid' in query_lower:
+                                    key_terms.append('financial aid')
+                                if 'housing' in query_lower:
+                                    key_terms.append('housing')
+                                if 'parking' in query_lower:
+                                    key_terms.append('parking')
+                                if 'bookstore' in query_lower:
+                                    key_terms.append('bookstore')
+                                if 'registrar' in query_lower:
+                                    key_terms.append('registrar')
+                                
+                                # If query has specific terms that aren't in results, fallback
+                                for term in key_terms:
+                                    if term not in obs_lower:
+                                        should_fallback = True
+                                        fallback_reason = f"'{term}' not in results"
+                                        break
+                            
+                            if should_fallback:
+                                print(f"\nDatabase results not relevant ({fallback_reason}) - trying web_search")
+                                web_search_query = f"SJSU {query}"
                                 try:
                                     observation = self.tools['web_search'].execute(web_search_query)
                                     step['action'] = 'web_search'
                                     step['action_input'] = web_search_query
                                     step['observation'] = observation
-                                    print(f"Web search completed for {course_code}")
+                                    print(f"Web search completed")
                                 except Exception as web_error:
-                                    observation = f"Could not find information for {course_code}. Please check the official SJSU catalog: https://catalog.sjsu.edu"
+                                    observation = f"I couldn't find specific information about this. Please check sjsu.edu or contact the university directly."
                                     step['observation'] = observation
                                     print(f"Web search failed: {web_error}")
                         
