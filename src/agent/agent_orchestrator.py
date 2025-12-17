@@ -85,8 +85,19 @@ class AgentOrchestrator:
                 
                 reasoning_steps.append(step)
                 
-                # Check if we have a final answer
-                if action == 'Final Answer':
+                # ENFORCE TOOL USAGE: On first iteration, reject Final Answer without tool usage
+                # This prevents hallucination when the model skips database lookup
+                if action == 'Final Answer' and iteration == 1:
+                    print("WARNING: Model tried to answer without using tools. Forcing database query...")
+                    # Force a database query with the original question
+                    action = 'database_query'
+                    action_input = query
+                    step['action'] = action
+                    step['action_input'] = action_input
+                    step['observation'] = None  # Will be filled by tool execution
+                
+                # Check if we have a final answer (only after first iteration)
+                if action == 'Final Answer' and iteration > 1:
                     final_answer = observation
                     print(f"\nFinal Answer: {final_answer}")
                     break
@@ -146,10 +157,23 @@ class AgentOrchestrator:
                 reasoning_steps.append(error_step)
                 break
         
-        # If no final answer, use last response
+        # If no final answer, construct one from the best observation
         if not final_answer and reasoning_steps:
-            last_step = reasoning_steps[-1]
-            final_answer = last_step.get('observation', last_step.get('thought', 'Unable to generate response'))
+            # Find the best observation (from database or web search)
+            best_observation = None
+            for step in reasoning_steps:
+                obs = step.get('observation', '')
+                if obs and '>>> MOST RELEVANT ANSWER >>>' in str(obs):
+                    best_observation = obs
+                    break
+                elif obs and not best_observation:
+                    best_observation = obs
+            
+            if best_observation:
+                # Extract useful content from observation
+                final_answer = f"Based on the SJSU database: {best_observation[:800]}"
+            else:
+                final_answer = reasoning_steps[-1].get('thought', 'Unable to generate response')
         
         
         result = {
