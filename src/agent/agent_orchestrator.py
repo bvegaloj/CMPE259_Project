@@ -324,9 +324,9 @@ Question: What are the prerequisites for CMPE 259?
 Thought: I need to find information about CMPE 259 prerequisites. I should query the SJSU database first.
 Action: database_query
 Action Input: CMPE 259 prerequisites
-Observation: >>> MOST RELEVANT ANSWER >>> CMPE 259 - Deep Learning: Prerequisites: CMPE 252 or CMPE 255 or CMPE 257, or instructor consent.
+Observation: >>> MOST RELEVANT ANSWER >>> CMPE 259 - Natural Language Processing: Prerequisites: CMPE 252 or CMPE 255 or CMPE 257, or instructor consent.
 Thought: I found the prerequisites in the database. I will provide the exact information.
-Final Answer: The prerequisites for CMPE 259 (Deep Learning) are: CMPE 252 or CMPE 255 or CMPE 257, or instructor consent.
+Final Answer: The prerequisites for CMPE 259 (Natural Language Processing) are: CMPE 252 or CMPE 255 or CMPE 257, or instructor consent.
 
 ---
 Now answer the following question using the same approach:
