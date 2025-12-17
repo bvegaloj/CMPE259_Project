@@ -22,13 +22,14 @@ class WebSearchTool:
             raise ValueError("TAVILY_API_KEY not found in environment variables")
         self.client = TavilyClient(api_key=api_key)
     
-    def execute(self, query: str, max_results: int = 3) -> str:
+    def execute(self, query: str, max_results: int = 3, include_domains: list = None) -> str:
         """
         Execute a web search using Tavily
         
         Args:
             query: Search query
             max_results: Maximum number of results to return
+            include_domains: Optional list of domains to prioritize (e.g., ['sjsu.edu'])
             
         Returns:
             Formatted search results
@@ -38,23 +39,40 @@ class WebSearchTool:
             if "sjsu" not in query.lower() and "san jose state" not in query.lower():
                 query = f"SJSU {query}"
             
+            # Check if this is a location/building query - prioritize official SJSU sources
+            location_terms = ['location', 'address', 'building', 'office', 'where', 'find', 'directions']
+            is_location_query = any(term in query.lower() for term in location_terms)
+            
+            # Build search parameters
+            search_params = {
+                'query': query,
+                'max_results': max_results,
+                'search_depth': 'advanced',
+                'include_raw_content': False
+            }
+            
+            # For location queries, prioritize SJSU official site and DISABLE AI summary
+            # (AI summaries can hallucinate addresses - use only actual page content)
+            if is_location_query:
+                search_params['include_domains'] = ['sjsu.edu']
+                search_params['include_answer'] = False  # Don't trust AI for addresses
+                search_params['include_raw_content'] = True  # Get actual page content
+            else:
+                search_params['include_answer'] = True
+                if include_domains:
+                    search_params['include_domains'] = include_domains
+            
             # Perform search using Tavily
-            response = self.client.search(
-                query=query,
-                max_results=max_results,
-                search_depth="advanced",  # Get more comprehensive results
-                include_answer=True,  # Get AI-generated answer
-                include_raw_content=False  # Don't need full page content
-            )
+            response = self.client.search(**search_params)
             
             if not response or 'results' not in response:
                 return "No search results found."
             
-            # Format results with AI answer if available
+            # Format results with AI answer if available (but not for location queries)
             formatted_results = []
             
-            # Add AI-generated answer if available
-            if response.get('answer'):
+            # Add AI-generated answer if available (skipped for location queries)
+            if response.get('answer') and not is_location_query:
                 formatted_results.append(f"Summary: {response['answer']}\n")
             
             # Add individual results
@@ -63,7 +81,14 @@ class WebSearchTool:
                 result_text = f"Result {i}:\n"
                 result_text += f"Title: {result.get('title', 'N/A')}\n"
                 result_text += f"URL: {result.get('url', 'N/A')}\n"
-                if result.get('content'):
+                
+                # For location queries, use more content to capture full address
+                if is_location_query:
+                    # Use raw_content if available, else content - with longer limit for addresses
+                    raw = result.get('raw_content') or result.get('content', '')
+                    content = raw[:800] + "..." if len(raw) > 800 else raw
+                    result_text += f"Content: {content}\n"
+                elif result.get('content'):
                     # Truncate content to keep it reasonable
                     content = result['content'][:300] + "..." if len(result.get('content', '')) > 300 else result.get('content', '')
                     result_text += f"Content: {content}\n"

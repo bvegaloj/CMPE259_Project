@@ -13,7 +13,7 @@ from src.tools.database_tool import DatabaseTool
 class AgentOrchestrator:
     """Orchestrates the ReAct agent reasoning and action loop"""
     
-    def __init__(self, llm_client, db_manager=None, config=None, max_iterations: int = 5):
+    def __init__(self, llm_client, db_manager=None, config=None, max_iterations: int = 10):
         """
         Initialize the agent orchestrator
         
@@ -128,33 +128,89 @@ class AgentOrchestrator:
                             
                             # Case 2: Results don't match query keywords (irrelevant results)
                             else:
-                                # Extract key terms from original query
+                                # Smart relevance detection - no manual trigger list needed
                                 query_lower = query.lower()
                                 obs_lower = observation.lower()
                                 
-                                # Check for specific terms that should appear in results
-                                key_terms = []
-                                if 'financial aid' in query_lower:
-                                    key_terms.append('financial aid')
-                                if 'housing' in query_lower:
-                                    key_terms.append('housing')
-                                if 'parking' in query_lower:
-                                    key_terms.append('parking')
-                                if 'bookstore' in query_lower:
-                                    key_terms.append('bookstore')
-                                if 'registrar' in query_lower:
-                                    key_terms.append('registrar')
+                                # Common stop words to ignore when checking relevance
+                                stop_words = {'what', 'where', 'when', 'how', 'who', 'which', 'is', 'are', 'was', 'were', 
+                                             'the', 'a', 'an', 'to', 'for', 'of', 'in', 'on', 'at', 'by', 'with',
+                                             'do', 'does', 'did', 'can', 'could', 'would', 'should', 'will',
+                                             'i', 'me', 'my', 'need', 'want', 'get', 'find', 'about', 'tell',
+                                             'sjsu', 'san', 'jose', 'state', 'university', 'enroll', 'apply',
+                                             'requirements', 'requirement', 'program', 'course', 'class'}
                                 
-                                # If query has specific terms that aren't in results, fallback
-                                for term in key_terms:
-                                    if term not in obs_lower:
+                                # Extract significant words from query (2+ chars, not stop words)
+                                query_words = set(word.strip('?.,!') for word in query_lower.split() 
+                                                 if len(word) > 2 and word.strip('?.,!') not in stop_words)
+                                
+                                # Check how many query words appear in the observation
+                                matches = sum(1 for word in query_words if word in obs_lower)
+                                
+                                # If less than half of significant query words are in results, fallback
+                                if query_words and matches < len(query_words) * 0.5:
+                                    should_fallback = True
+                                    missing_words = [w for w in query_words if w not in obs_lower]
+                                    fallback_reason = f"query terms not in results: {', '.join(missing_words[:3])}"
+                                
+                                # Also check conversation history for context on vague queries
+                                if not should_fallback and len(query.split()) <= 5 and self.conversation_history:
+                                    # Extract terms from recent conversation
+                                    conv_terms = set()
+                                    for msg in self.conversation_history[-2:]:
+                                        msg_lower = msg.get('content', '').lower()
+                                        for word in msg_lower.split():
+                                            word = word.strip('?.,!')
+                                            if len(word) > 3 and word not in stop_words:
+                                                conv_terms.add(word)
+                                    
+                                    # If conversation has specific terms not in results, fallback
+                                    conv_matches = sum(1 for term in conv_terms if term in obs_lower)
+                                    if conv_terms and conv_matches < len(conv_terms) * 0.3:
                                         should_fallback = True
-                                        fallback_reason = f"'{term}' not in results"
-                                        break
+                                        fallback_reason = "conversation context not in results"
                             
                             if should_fallback:
                                 print(f"\nDatabase results not relevant ({fallback_reason}) - trying web_search")
-                                web_search_query = f"SJSU {query}"
+                                
+                                # Build optimized search query based on query type
+                                query_lower = query.lower()
+                                location_words = ['where', 'location', 'building', 'address', 'find', 'directions', 'located']
+                                is_location_query = any(word in query_lower for word in location_words)
+                                
+                                if is_location_query:
+                                    # For location queries, search for "SJSU [office name] office location address building"
+                                    # Extract the subject (e.g., "financial aid" from "where is the financial aid building")
+                                    subject = query_lower
+                                    for word in location_words + ['the', 'is', 'are', 'sjsu', '?', 'what']:
+                                        subject = subject.replace(word, ' ')
+                                    subject = ' '.join(subject.split()).strip()
+                                    
+                                    # If subject is empty/vague, try to get it from conversation history
+                                    if len(subject) < 3 and self.conversation_history:
+                                        for msg in reversed(self.conversation_history[-4:]):
+                                            msg_lower = msg.get('content', '').lower()
+                                            # Look for key subjects in recent conversation
+                                            if 'financial aid' in msg_lower:
+                                                subject = 'financial aid'
+                                                break
+                                            elif 'housing' in msg_lower:
+                                                subject = 'housing'
+                                                break
+                                            elif 'parking' in msg_lower:
+                                                subject = 'parking'
+                                                break
+                                            elif 'registrar' in msg_lower:
+                                                subject = 'registrar'
+                                                break
+                                            elif 'bookstore' in msg_lower:
+                                                subject = 'bookstore'
+                                                break
+                                    
+                                    web_search_query = f"SJSU {subject} office location address building"
+                                else:
+                                    web_search_query = f"SJSU {query}"
+                                
                                 try:
                                     observation = self.tools['web_search'].execute(web_search_query)
                                     step['action'] = 'web_search'
@@ -277,6 +333,18 @@ Now answer the following question using the same approach:
 
 """
         prompt = few_shot_example
+        
+        # Add recent conversation context for follow-up questions
+        if self.conversation_history and len(self.conversation_history) >= 2:
+            # Include last exchange (1 user question + 1 assistant response)
+            recent_context = self.conversation_history[-2:]
+            prompt += "Recent conversation for context:\n"
+            for msg in recent_context:
+                role = msg.get('role', 'unknown').capitalize()
+                content = msg.get('content', '')[:200]  # Truncate to avoid too much context
+                prompt += f"{role}: {content}\n"
+            prompt += "\n"
+        
         prompt += f"Question: {query}\n\n"
         if context:
             prompt += f"Additional Context: {context}\n\n"
@@ -356,11 +424,41 @@ Now answer the following question using the same approach:
     
     def _format_observation_as_answer(self, observation: str) -> str:
         """
-        Format a raw database observation into a clean, readable response.
+        Format a raw database or web search observation into a clean, readable response.
         Extracts the most relevant information and removes metadata markers.
         """
         # Extract the first/best result content
         obs_str = str(observation)
+        
+        # Check if it's a web search result (Summary + Result format)
+        if 'Summary:' in obs_str:
+            # Extract the AI-generated summary from web search
+            match = re.search(r'Summary:\s*(.+?)(?:\n\s*Result \d+:|\Z)', obs_str, re.DOTALL)
+            if match:
+                summary = match.group(1).strip()
+                # Also try to extract source URL for citation
+                url_match = re.search(r'URL:\s*(https?://[^\n]+)', obs_str)
+                if url_match and 'sjsu.edu' in url_match.group(1):
+                    return f"{summary}\n\nSource: {url_match.group(1)}"
+                return summary
+        
+        # Check if it's web search without summary but with results
+        if 'Result 1:' in obs_str and 'Content:' in obs_str:
+            # Extract title and content from first result
+            title_match = re.search(r'Title:\s*([^\n]+)', obs_str)
+            content_match = re.search(r'Content:\s*(.+?)(?:\n\s*Result \d+:|\Z)', obs_str, re.DOTALL)
+            url_match = re.search(r'URL:\s*(https?://[^\n]+)', obs_str)
+            
+            if content_match:
+                content = content_match.group(1).strip()
+                # Clean up truncation markers
+                content = content.replace('...', '')
+                
+                # Try to extract specific info like addresses, phone numbers
+                response = content
+                if url_match:
+                    response += f"\n\nSource: {url_match.group(1)}"
+                return response
         
         # Check if it's a Q&A format (FAQ)
         if 'Q:' in obs_str and 'A:' in obs_str:
